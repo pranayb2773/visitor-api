@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -25,6 +27,15 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
             //
+        });
+
+        $this->renderable(function (ThrottleRequestsException $e, $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'message' => 'Too Many Requests. Please slow down',
+                    'error' => $e->getHeaders()
+                ], Response::HTTP_TOO_MANY_REQUESTS)->withHeaders($e->getHeaders());
+            }
         });
     }
 }
