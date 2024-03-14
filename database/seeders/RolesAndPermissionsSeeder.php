@@ -18,6 +18,9 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $this->permissions();
         $this->roles();
+
+        Role::firstWhere('name', 'Receptionist')?->givePermissionTo(['view.user', 'create.user']);
+        Role::firstWhere('name', 'Employee')?->givePermissionTo(['view.user', 'edit.user']);
     }
 
     private function permissions(): void

@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\v1\AdminUserController;
 use App\Http\Controllers\v1\AuthController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,5 +20,6 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/logout', [AuthController::class, 'logout']);
+        Route::apiResource('/admin/users', AdminUserController::class);
     });
 });
